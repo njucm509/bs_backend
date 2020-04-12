@@ -1,0 +1,14 @@
+server:
+  port: 10086
+spring:
+  application:
+    name: bs-registry
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:${server.port}/eureka
+    fetch-registry: false
+    register-with-eureka: false
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 5000
