@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>cn.edu.njucm.wp.bs.user</groupId>
     <artifactId>bs-user</artifactId>
     <packaging>pom</packaging>
     <modules>
