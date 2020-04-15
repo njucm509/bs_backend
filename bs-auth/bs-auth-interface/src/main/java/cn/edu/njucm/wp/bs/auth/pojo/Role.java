@@ -2,14 +2,16 @@ package cn.edu.njucm.wp.bs.auth.pojo;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
 @Table(name = "roles")
 public class Role {
-    private Long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String slug;
 
