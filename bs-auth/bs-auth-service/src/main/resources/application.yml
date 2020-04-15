@@ -20,3 +20,16 @@ eureka:
     instance-id: ${eureka.instance.ip-address}.${server.port}
     lease-expiration-duration-in-seconds: 15
     lease-renewal-interval-in-seconds: 5
+mybatis:
+  mapper-locations: cn/edu/njucm/wp/bs/auth/mapper/*.xml
+  type-aliases-package: cn.edu.njucm.wp.bs.auth.pojo
+logging:
+  level:
+    cn:
+      edu:
+        njucm:
+          wp:
+            bs:
+              auth:
+                mapper:
+                  debug
