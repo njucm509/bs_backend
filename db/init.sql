@@ -78,6 +78,31 @@ LOCK TABLES `permissions` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `role_field`
+--
+
+DROP TABLE IF EXISTS `role_field`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `role_field` (
+  `role_id` bigint NOT NULL,
+  `field_id` int DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_field`
+--
+
+LOCK TABLES `role_field` WRITE;
+/*!40000 ALTER TABLE `role_field` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role_field` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `role_permission`
 --
 
@@ -129,31 +154,6 @@ LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 INSERT INTO `roles` VALUES (2,'admin','管理员',NULL,'2020-04-15 00:36:47','2020-04-15 01:16:46');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user_field`
---
-
-DROP TABLE IF EXISTS `user_field`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_field` (
-  `user_id` bigint NOT NULL,
-  `field_id` int DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_field`
---
-
-LOCK TABLES `user_field` WRITE;
-/*!40000 ALTER TABLE `user_field` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_field` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -225,4 +225,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-15 17:52:52
+-- Dump completed on 2020-04-15 17:56:08
