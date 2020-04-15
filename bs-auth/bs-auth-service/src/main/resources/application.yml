@@ -23,6 +23,14 @@ eureka:
 mybatis:
   mapper-locations: cn/edu/njucm/wp/bs/auth/mapper/*.xml
   type-aliases-package: cn.edu.njucm.wp.bs.auth.pojo
+bs:
+  jwt:
+    secret: bs@login
+    pubKeyPath: ./rsa/rsa.pub
+    priKeyPath: ./rsa/rsa.pri
+    expire: 30 # 过期时间
+    cookieName: BS_TOKEN
+    cookieMaxAge: 30
 logging:
   level:
     cn:
