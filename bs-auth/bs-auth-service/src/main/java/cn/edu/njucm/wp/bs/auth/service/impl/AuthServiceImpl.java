@@ -1,8 +1,13 @@
 package cn.edu.njucm.wp.bs.auth.service.impl;
 
+import cn.edu.njucm.wp.bs.auth.bo.UserInfo;
+import cn.edu.njucm.wp.bs.auth.client.UserClient;
 import cn.edu.njucm.wp.bs.auth.mapper.AuthMapper;
 import cn.edu.njucm.wp.bs.auth.pojo.Role;
+import cn.edu.njucm.wp.bs.auth.properties.JwtProperties;
 import cn.edu.njucm.wp.bs.auth.service.AuthService;
+import cn.edu.njucm.wp.bs.auth.utils.JwtUtils;
+import cn.edu.njucm.wp.bs.user.pojo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     AuthMapper authMapper;
+
+    @Autowired
+    UserClient userClient;
+
+    @Autowired
+    JwtProperties properties;
 
     @Override
     public Integer create(Role role) {
@@ -67,4 +78,19 @@ public class AuthServiceImpl implements AuthService {
         authMapper.getRoleByUserId(id);
         return null;
     }
+
+    @Override
+    public String authentication(String username, String password) {
+        try {
+            User user = userClient.queryUser(username, password);
+            if (user == null) {
+                return null;
+            }
+            String token = JwtUtils.generateToken(new UserInfo(user.getId(), user.getName()), properties.getPrivateKey(), properties.getExpire());
+            log.info("token generate: {}", token);
+            return token;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;    }
 }

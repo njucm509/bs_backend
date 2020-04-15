@@ -18,4 +18,6 @@ public interface AuthService {
     Role getRoleByUserId(Long id);
 
     Integer getRoleIdByUserId(Long id);
+
+    String authentication(String username, String password);
 }
