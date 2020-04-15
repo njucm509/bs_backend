@@ -7,4 +7,8 @@ import tk.mybatis.mapper.common.Mapper;
 @Repository
 public interface AuthMapper extends Mapper<Role> {
     Integer check(Role role);
+
+    Role getRoleByUserId(Long id);
+
+    Integer getRoleIdByUserId(Long id);
 }

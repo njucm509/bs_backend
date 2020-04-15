@@ -55,4 +55,16 @@ public class AuthServiceImpl implements AuthService {
     public Boolean check(Role role) {
         return authMapper.check(role) == 1 ? true : false;
     }
+
+    @Override
+    public Integer getRoleIdByUserId(Long id) {
+        authMapper.getRoleIdByUserId(id);
+        return null;
+    }
+
+    @Override
+    public Role getRoleByUserId(Long id) {
+        authMapper.getRoleByUserId(id);
+        return null;
+    }
 }

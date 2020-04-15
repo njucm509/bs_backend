@@ -14,4 +14,8 @@ public interface AuthService {
     Integer update(Role role);
 
     Boolean check(Role role);
+
+    Role getRoleByUserId(Long id);
+
+    Integer getRoleIdByUserId(Long id);
 }

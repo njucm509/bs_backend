@@ -1,6 +1,7 @@
 package cn.edu.njucm.wp.bs.auth.controller;
 
 import cn.edu.njucm.wp.bs.auth.pojo.Role;
+import cn.edu.njucm.wp.bs.auth.bo.UserRole;
 import cn.edu.njucm.wp.bs.auth.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,4 +56,10 @@ public class AuthController {
         return ResponseEntity.ok(res);
     }
 
+    @PostMapping("authorize")
+    public ResponseEntity<Boolean> addRole2User(UserRole userRole) {
+        Role role = authService.getRoleByUserId(userRole.getAdminId());
+
+        return ResponseEntity.ok(true);
+    }
 }

@@ -2,15 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.edu.njucm.wp.bs.auth.mapper.AuthMapper">
-    <sql id="table">roles</sql>
+    <sql id="role">roles</sql>
+    <sql id="permission">permissions</sql>
+    <sql id="userRole">user_role</sql>
+    <sql id="rolePermission">role_permission</sql>
 
+    <resultMap id="baseMap" type="Role">
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
     <select id="check" resultType="java.lang.Integer">
         SELECT count(id) FROM
-        <include refid="table"/>
+        <include refid="role"/>
         WHERE (slug = #{slug} OR name = #{name})
         <if test="id != null">
             and id != #{id}
         </if>
     </select>
 
+    <select id="getRoleIdByUserId" resultType="java.lang.Integer">
+        select role_id from user_role where user_id = #{id}
+    </select>
+
+    <select id="getRoleByUserId" resultType="Role" resultMap="baseMap">
+        select * from <include refid="role"/>
+    </select>
 </mapper>
