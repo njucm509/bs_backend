@@ -17,6 +17,7 @@ zuul:
   retryable: true
   routes:
     user-service: /user/**
+    auth-service: /auth/**
 #ribbon:
 #  ConnectTimeout: 250 # 连接超时时间(ms)
 #    ReadTimeout: 2000 # 通信超时时间(ms)
