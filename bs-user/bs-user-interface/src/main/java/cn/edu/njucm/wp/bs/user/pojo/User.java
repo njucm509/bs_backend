@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 @Data
-@Table(name = "bs_user")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -20,7 +20,9 @@ public class User {
     private Long id;
 
     @Length(min = 4,max = 15,message = "用户名只能在4～15位之间")
-    private String username;
+    private String name;
+
+    private String nickname;
 
     @JsonIgnore
     private String password;
@@ -28,9 +30,15 @@ public class User {
     @Pattern(regexp = "^1[35678]\\d{9}$", message = "手机号格式不正确")
     private String phone;
 
+    private String email;
+
+    private Integer ip;
+
     private byte flag;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private LocalDateTime deletedAt;
 }
