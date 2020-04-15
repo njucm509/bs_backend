@@ -1,0 +1,22 @@
+server:
+  port: 10003
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/wp_bs?useSSL=FALSE&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 88888888
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: ${eureka.instance.ip-address}.${server.port}
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5

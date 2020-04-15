@@ -9,7 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>cn.edu.njucm.wp.bs.auth</groupId>
     <artifactId>bs-auth</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>bs-auth-interface</module>
+        <module>bs-auth-service</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -19,6 +25,10 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
