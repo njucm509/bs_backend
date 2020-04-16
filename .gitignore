@@ -4,3 +4,4 @@ target
 build
 push.sh
 dump.sh
+bs-auth/rsa/rsa.*
