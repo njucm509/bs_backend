@@ -7,6 +7,9 @@ import cn.edu.njucm.wp.bs.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -25,5 +28,16 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return user;
+    }
+
+    @Override
+    public Integer register(User user) {
+        if (user.getCreatedAt() == null) {
+            user.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        }
+        if (user.getUpdatedAt() == null) {
+            user.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        }
+        return userMapper.insertSelective(user);
     }
 }
