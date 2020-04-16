@@ -26,8 +26,8 @@ mybatis:
 bs:
   jwt:
     secret: bs@login
-    pubKeyPath: ./rsa/rsa.pub
-    priKeyPath: ./rsa/rsa.pri
+    pubKeyPath: bs-auth/rsa/rsa.pub
+    priKeyPath: bs-auth/rsa/rsa.pri
     expire: 30 # 过期时间
     cookieName: BS_TOKEN
     cookieMaxAge: 30

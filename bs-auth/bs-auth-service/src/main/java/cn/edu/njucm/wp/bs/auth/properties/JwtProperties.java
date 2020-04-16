@@ -37,6 +37,8 @@ public class JwtProperties {
         try {
             File pubKey = new File(pubKeyPath);
             File priKey = new File(priKeyPath);
+            log.info(pubKey.getAbsolutePath());
+            log.info(priKeyPath);
             if (!pubKey.exists() || !priKey.exists()) {
                 RsaUtils.generateKey(pubKeyPath, priKeyPath, secret);
             }
