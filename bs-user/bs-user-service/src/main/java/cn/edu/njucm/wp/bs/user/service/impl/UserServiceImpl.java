@@ -37,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer create(User user) {
+        if (user.getPassword() != null) {
+            user.setPassword(MD5Util.encrypt(user.getPassword()));
+        }
         if (user.getCreatedAt() == null) {
             user.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
         }
@@ -54,8 +57,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean bindRole(Long id, List<Integer> roleId) {
-        return authClient.bindRole(id, roleId);
+    public Boolean bindRole(Long userId, List<Integer> roleId) {
+        return authClient.bindRole(userId, roleId);
     }
 
     @Override

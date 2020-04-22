@@ -24,7 +24,6 @@ public class User {
 
     private String nickname;
 
-    @JsonIgnore
     private String password;
 
     @Pattern(regexp = "^1[35678]\\d{9}$", message = "手机号格式不正确")

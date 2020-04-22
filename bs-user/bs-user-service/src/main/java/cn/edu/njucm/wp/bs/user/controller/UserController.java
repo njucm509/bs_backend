@@ -50,6 +50,9 @@ public class UserController {
 
     @PostMapping("create")
     public ResponseEntity<UserVO> create(@RequestBody UserVO userVO) {
+        if (userService.getByName(userVO.getName()) != null) {
+            return ResponseEntity.ok(null);
+        }
         User user = new User();
         UserVO res = new UserVO();
         BeanUtils.copyProperties(userVO, user);
@@ -61,7 +64,7 @@ public class UserController {
             BeanUtils.copyProperties(cur, res);
             res.setRoleId(userVO.getRoleId());
         }
-        return null;
+        return ResponseEntity.ok(res);
     }
 
     public ResponseEntity<UserVO> update(@RequestBody UserVO userVO) {
