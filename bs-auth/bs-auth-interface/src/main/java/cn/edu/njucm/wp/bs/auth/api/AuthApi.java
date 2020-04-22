@@ -2,6 +2,7 @@ package cn.edu.njucm.wp.bs.auth.api;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -9,8 +10,8 @@ import java.util.List;
 public interface AuthApi {
 
     @PostMapping("bind")
-    Boolean bindRole(Long userId, List<Integer> roleId);
+    Boolean bindRole(@RequestParam("userId") Long userId, @RequestParam("roleId") List<Integer> roleId);
 
     @PostMapping("user")
-    List<Integer> getRoleByUserId(Long id);
+    List<Integer> getRoleByUserId(@RequestParam("id") Long id);
 }

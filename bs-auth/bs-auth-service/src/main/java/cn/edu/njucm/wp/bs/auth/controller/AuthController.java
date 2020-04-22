@@ -87,12 +87,12 @@ public class AuthController {
     }
 
     @PostMapping("bind")
-    public ResponseEntity<Boolean> bindRole(Long userId, List<Integer> roleId) {
+    public ResponseEntity<Boolean> bindRole(Long userId, @RequestParam("roleId") List<Integer> roleId) {
         return ResponseEntity.ok(authService.bindRole(userId, roleId) >= 1 ? true : false);
     }
 
     @PostMapping("user")
-    public ResponseEntity<List<Integer>> getRoleByUserId(Long id) {
+    public ResponseEntity<List<Integer>> getRoleByUserId(@RequestParam("id") Long id) {
         List<Integer> roleId = authService.getRoleIdByUserId(id);
         if (CollectionUtils.isEmpty(roleId)) {
             return ResponseEntity.ok(Collections.emptyList());

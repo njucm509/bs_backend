@@ -15,7 +15,6 @@ public interface AuthMapper extends Mapper<Role> {
 
     Role getRoleByUserId(Long id);
 
-    @Select("select role_id from user_role where user_id = #{id}")
     List<Integer> getRoleIdByUserId(@Param("id") Long id);
 
     @Insert("insert into user_role values (#{userId},#{roleId},now(),now())")
