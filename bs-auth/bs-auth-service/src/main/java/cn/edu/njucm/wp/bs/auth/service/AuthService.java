@@ -17,7 +17,9 @@ public interface AuthService {
 
     Role getRoleByUserId(Long id);
 
-    Integer getRoleIdByUserId(Long id);
+    List<Integer> getRoleIdByUserId(Long id);
 
     String authentication(String username, String password);
+
+    Integer bindRole(Long userId, List<Integer> roleId);
 }

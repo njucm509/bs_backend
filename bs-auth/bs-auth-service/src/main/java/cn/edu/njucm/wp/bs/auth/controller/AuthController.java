@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -83,5 +84,19 @@ public class AuthController {
         CookieUtils.setCookie(request, response, properties.getCookieName(), token, properties.getCookieMaxAge(), false);
         Cookie[] cookies = request.getCookies();
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("bind")
+    public ResponseEntity<Boolean> bindRole(Long userId, List<Integer> roleId) {
+        return ResponseEntity.ok(authService.bindRole(userId, roleId) >= 1 ? true : false);
+    }
+
+    @PostMapping("user")
+    public ResponseEntity<List<Integer>> getRoleByUserId(Long id) {
+        List<Integer> roleId = authService.getRoleIdByUserId(id);
+        if (CollectionUtils.isEmpty(roleId)) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        return ResponseEntity.ok(roleId);
     }
 }

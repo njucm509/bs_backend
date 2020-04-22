@@ -1,8 +1,13 @@
 package cn.edu.njucm.wp.bs.auth.mapper;
 
 import cn.edu.njucm.wp.bs.auth.pojo.Role;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
+
+import java.util.List;
 
 @Repository
 public interface AuthMapper extends Mapper<Role> {
@@ -10,5 +15,9 @@ public interface AuthMapper extends Mapper<Role> {
 
     Role getRoleByUserId(Long id);
 
-    Integer getRoleIdByUserId(Long id);
+    @Select("select role_id from user_role where user_id = #{id}")
+    List<Integer> getRoleIdByUserId(@Param("id") Long id);
+
+    @Insert("insert into user_role values (#{userId},#{roleId},now(),now())")
+    Integer bindRole(@Param("userId") Long userId, @Param("roleId") Integer roleId);
 }

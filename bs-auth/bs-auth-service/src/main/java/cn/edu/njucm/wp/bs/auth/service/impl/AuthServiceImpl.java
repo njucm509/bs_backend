@@ -11,7 +11,6 @@ import cn.edu.njucm.wp.bs.user.pojo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -68,9 +67,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Integer getRoleIdByUserId(Long id) {
-        authMapper.getRoleIdByUserId(id);
-        return null;
+    public List<Integer> getRoleIdByUserId(Long id) {
+        return authMapper.getRoleIdByUserId(id);
     }
 
     @Override
@@ -92,5 +90,16 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;    }
+        return null;
+    }
+
+    @Override
+    public Integer bindRole(Long userId, List<Integer> roleId) {
+        Integer res = 0;
+        for (Integer id : roleId) {
+            res += authMapper.bindRole(userId, id);
+        }
+        return res;
+    }
+
 }
