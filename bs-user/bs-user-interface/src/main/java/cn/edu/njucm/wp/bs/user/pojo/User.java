@@ -33,7 +33,7 @@ public class User {
 
     private Integer ip;
 
-    private byte flag;
+    private Integer flag;
 
     private LocalDateTime createdAt;
 

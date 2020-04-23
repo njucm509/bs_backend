@@ -1,15 +1,21 @@
 package cn.edu.njucm.wp.bs.user.controller;
 
+import cn.edu.njucm.wp.bs.common.encrypt.MD5Util;
 import cn.edu.njucm.wp.bs.user.pojo.User;
 import cn.edu.njucm.wp.bs.user.service.UserService;
+import cn.edu.njucm.wp.bs.user.vo.RegisterForm;
 import cn.edu.njucm.wp.bs.user.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -24,9 +30,27 @@ public class UserController {
         return "hello";
     }
 
-    public ResponseEntity<User> login() {
-        User user = null;
-        return ResponseEntity.ok(user);
+    @PostMapping("login")
+    public ResponseEntity<HashMap<String, Object>> login(@RequestBody User user) {
+        log.info("user: {}", user);
+        HashMap<String, Object> res = new HashMap<>();
+        User u = userService.queryUser(user.getName(), user.getPassword());
+        log.info("find user: {}", u);
+        if (u == null) {
+            res.put("code", 0);
+            res.put("msg", "用户不存在");
+        } else if (!MD5Util.encrypt(user.getPassword()).equals(u.getPassword())) {
+            res.put("code", 0);
+            res.put("msg", "密码错误");
+        } else if (u.getFlag() == 0) {
+            res.put("code", 0);
+            res.put("msg", "请等待管理员审核");
+        } else {
+            res.put("code", 1);
+            res.put("msg", "登陆成功");
+            res.put("user", u);
+        }
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("check")
@@ -49,7 +73,8 @@ public class UserController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<UserVO> create(@RequestBody UserVO userVO) {
+    public ResponseEntity<UserVO> create(@RequestBody RegisterForm userVO) {
+        log.info("register: {}", userVO);
         if (userService.getByName(userVO.getName()) != null) {
             return ResponseEntity.ok(null);
         }
@@ -59,10 +84,10 @@ public class UserController {
         boolean flag = userService.create(user) == 1;
         if (flag) {
             User cur = userService.getByName(userVO.getName());
-            Boolean f = userService.bindRole(cur.getId(), userVO.getRoleId());
+            Boolean f = userService.bindRole(cur.getId(), Arrays.asList(userVO.getRoleId()));
             List<Integer> roleId = userService.getRoleIdByUserId(cur.getId());
             BeanUtils.copyProperties(cur, res);
-            res.setRoleId(userVO.getRoleId());
+            res.setRoleId(roleId);
         }
         return ResponseEntity.ok(res);
     }
@@ -72,5 +97,15 @@ public class UserController {
         User user = new User();
         BeanUtils.copyProperties(userVO, user);
         return null;
+    }
+
+    @RequestMapping("role/{id}")
+    public ResponseEntity<List<Integer>> getRoleIdByUserId(@PathVariable("id") Long id) {
+        log.info("id: {}", id);
+        List<Integer> list = userService.getRoleIdByUserId(id);
+        if (CollectionUtils.isEmpty(list)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(list);
     }
 }

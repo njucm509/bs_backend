@@ -25,14 +25,7 @@ public class UserServiceImpl implements UserService {
     public User queryUser(String username, String password) {
         User record = new User();
         record.setName(username);
-        User user = userMapper.selectOne(record);
-        if (user == null) {
-            return null;
-        }
-        if (!user.getPassword().equals(MD5Util.encrypt(password))) {
-            return null;
-        }
-        return user;
+        return userMapper.selectOne(record);
     }
 
     @Override
