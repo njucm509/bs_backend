@@ -1,0 +1,18 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: upload-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/wp_bs?useSSL=FALSE&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 88888888
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+hadoop:
+  home: /usr/local/Cellar/hadoop/3.2.1
+  user: weilin
+  hdfs:
+    uri: localhost:8020
+    userFilePath: /input
