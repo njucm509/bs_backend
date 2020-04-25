@@ -5,6 +5,7 @@ import cn.edu.njucm.wp.bs.user.pojo.User;
 import cn.edu.njucm.wp.bs.user.service.UserService;
 import cn.edu.njucm.wp.bs.user.vo.RegisterForm;
 import cn.edu.njucm.wp.bs.user.vo.UserVO;
+import cn.edu.njucm.wp.bs.util.IPUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,7 +75,7 @@ public class UserController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<UserVO> create(@RequestBody RegisterForm userVO) {
+    public ResponseEntity<UserVO> create(@RequestBody RegisterForm userVO, HttpServletRequest request) {
         log.info("register: {}", userVO);
         if (userService.getByName(userVO.getName()) != null) {
             return ResponseEntity.ok(null);
@@ -81,6 +83,9 @@ public class UserController {
         User user = new User();
         UserVO res = new UserVO();
         BeanUtils.copyProperties(userVO, user);
+        if (IPUtil.getIp(request) != 0) {
+            user.setIp(IPUtil.getIp(request));
+        }
         boolean flag = userService.create(user) == 1;
         if (flag) {
             User cur = userService.getByName(userVO.getName());
@@ -92,11 +97,18 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
-    public ResponseEntity<UserVO> update(@RequestBody UserVO userVO) {
+    @PostMapping("update")
+    public ResponseEntity<Boolean> update(@RequestBody UserVO userVO) {
+        log.info("user update: {}", userVO);
         log.info("user vo: {}", userVO);
         User user = new User();
         BeanUtils.copyProperties(userVO, user);
-        return null;
+        Integer res = userService.update(user);
+        if (res == 1) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
     }
 
     @RequestMapping("role/{id}")

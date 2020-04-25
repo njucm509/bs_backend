@@ -58,4 +58,9 @@ public class UserServiceImpl implements UserService {
     public List<Integer> getRoleIdByUserId(Long id) {
         return authClient.getRoleByUserId(id);
     }
+
+    @Override
+    public Integer update(User user) {
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
 }

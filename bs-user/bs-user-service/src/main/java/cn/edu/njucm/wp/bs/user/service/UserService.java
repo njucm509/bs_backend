@@ -14,4 +14,6 @@ public interface UserService {
     Boolean bindRole(Long id, List<Integer> roleId);
 
     List<Integer> getRoleIdByUserId(Long id);
+
+    Integer update(User user);
 }
