@@ -18,6 +18,7 @@ zuul:
   routes:
     user-service: /user/**
     auth-service: /auth/**
+    data-service: /data/**
 #ribbon:
 #  ConnectTimeout: 250 # 连接超时时间(ms)
 #    ReadTimeout: 2000 # 通信超时时间(ms)
