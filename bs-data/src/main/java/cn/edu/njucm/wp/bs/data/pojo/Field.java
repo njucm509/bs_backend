@@ -1,4 +1,4 @@
-package cn.edu.njucm.wp.bs.auth.pojo;
+package cn.edu.njucm.wp.bs.data.pojo;
 
 import lombok.Data;
 
