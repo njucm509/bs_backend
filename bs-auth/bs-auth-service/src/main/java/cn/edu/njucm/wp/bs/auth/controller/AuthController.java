@@ -1,5 +1,6 @@
 package cn.edu.njucm.wp.bs.auth.controller;
 
+import cn.edu.njucm.wp.bs.auth.pojo.Permission;
 import cn.edu.njucm.wp.bs.auth.pojo.Role;
 import cn.edu.njucm.wp.bs.auth.bo.UserRole;
 import cn.edu.njucm.wp.bs.auth.properties.JwtProperties;
@@ -67,6 +68,15 @@ public class AuthController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("permission/list")
+    public ResponseEntity<List<Permission>> permissionList() {
+        List<Permission> res = authService.permissionList();
+        if (CollectionUtils.isEmpty(res)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(res);
+    }
+
     @PostMapping("authorize")
     public ResponseEntity<Boolean> addRole2User(UserRole userRole) {
         Role role = authService.getRoleByUserId(userRole.getAdminId());
@@ -95,7 +105,7 @@ public class AuthController {
     public ResponseEntity<List<Integer>> getRoleByUserId(@RequestParam("id") Long id) {
         List<Integer> roleId = authService.getRoleIdByUserId(id);
         if (CollectionUtils.isEmpty(roleId)) {
-            return ResponseEntity.ok(Collections.emptyList());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(roleId);
     }

@@ -10,7 +10,7 @@ import tk.mybatis.mapper.common.Mapper;
 import java.util.List;
 
 @Repository
-public interface AuthMapper extends Mapper<Role> {
+public interface RoleMapper extends Mapper<Role> {
     Integer check(Role role);
 
     Role getRoleByUserId(Long id);

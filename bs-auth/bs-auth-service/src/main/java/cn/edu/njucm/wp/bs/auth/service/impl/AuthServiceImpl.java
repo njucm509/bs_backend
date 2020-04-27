@@ -2,7 +2,9 @@ package cn.edu.njucm.wp.bs.auth.service.impl;
 
 import cn.edu.njucm.wp.bs.auth.bo.UserInfo;
 import cn.edu.njucm.wp.bs.auth.client.UserClient;
-import cn.edu.njucm.wp.bs.auth.mapper.AuthMapper;
+import cn.edu.njucm.wp.bs.auth.mapper.PermissionMapper;
+import cn.edu.njucm.wp.bs.auth.mapper.RoleMapper;
+import cn.edu.njucm.wp.bs.auth.pojo.Permission;
 import cn.edu.njucm.wp.bs.auth.pojo.Role;
 import cn.edu.njucm.wp.bs.auth.properties.JwtProperties;
 import cn.edu.njucm.wp.bs.auth.service.AuthService;
@@ -21,7 +23,10 @@ import java.util.List;
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
-    AuthMapper authMapper;
+    RoleMapper roleMapper;
+
+    @Autowired
+    PermissionMapper permissionMapper;
 
     @Autowired
     UserClient userClient;
@@ -39,41 +44,41 @@ public class AuthServiceImpl implements AuthService {
             role.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
         }
 
-        return authMapper.insert(role);
+        return roleMapper.insert(role);
     }
 
     @Override
     public Integer delete(Integer id) {
         Role role = new Role();
         role.setId(id);
-        return authMapper.delete(role);
+        return roleMapper.delete(role);
     }
 
     @Override
     public List<Role> list() {
-        return authMapper.selectAll();
+        return roleMapper.selectAll();
     }
 
     @Override
     public Integer update(Role role) {
         role.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
 
-        return authMapper.updateByPrimaryKeySelective(role);
+        return roleMapper.updateByPrimaryKeySelective(role);
     }
 
     @Override
     public Boolean check(Role role) {
-        return authMapper.check(role) == 1 ? true : false;
+        return roleMapper.check(role) == 1 ? true : false;
     }
 
     @Override
     public List<Integer> getRoleIdByUserId(Long id) {
-        return authMapper.getRoleIdByUserId(id);
+        return roleMapper.getRoleIdByUserId(id);
     }
 
     @Override
     public Role getRoleByUserId(Long id) {
-        authMapper.getRoleByUserId(id);
+        roleMapper.getRoleByUserId(id);
         return null;
     }
 
@@ -97,9 +102,14 @@ public class AuthServiceImpl implements AuthService {
     public Integer bindRole(Long userId, List<Integer> roleId) {
         Integer res = 0;
         for (Integer id : roleId) {
-            res += authMapper.bindRole(userId, id);
+            res += roleMapper.bindRole(userId, id);
         }
         return res;
+    }
+
+    @Override
+    public List<Permission> permissionList() {
+        return permissionMapper.selectAll();
     }
 
 }

@@ -1,5 +1,6 @@
 package cn.edu.njucm.wp.bs.auth.service;
 
+import cn.edu.njucm.wp.bs.auth.pojo.Permission;
 import cn.edu.njucm.wp.bs.auth.pojo.Role;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface AuthService {
     String authentication(String username, String password);
 
     Integer bindRole(Long userId, List<Integer> roleId);
+
+    List<Permission> permissionList();
 }
