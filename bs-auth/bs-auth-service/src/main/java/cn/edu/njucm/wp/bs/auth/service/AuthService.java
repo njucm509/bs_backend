@@ -25,4 +25,7 @@ public interface AuthService {
     Integer bindRole(Long userId, List<Integer> roleId);
 
     List<Permission> permissionList();
+
+    List<Integer> getPermissionIdByRoleId(List<Integer> ids);
+
 }

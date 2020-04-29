@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.njucm.wp.bs.auth.mapper.PermissionMapper">
+    <sql id="permission">permissions</sql>
+    <sql id="rolePermission">role_permission</sql>
+
+    <resultMap id="baseMap" type="Permission">
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <select id="getPermissionIdByRoleId" resultType="java.lang.Integer" resultMap="baseMap">
+        select permission_id from
+        <include refid="rolePermission"/>
+        <where>
+            role_id in
+            <foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+</mapper>

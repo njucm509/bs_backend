@@ -112,4 +112,9 @@ public class AuthServiceImpl implements AuthService {
         return permissionMapper.selectAll();
     }
 
+    @Override
+    public List<Integer> getPermissionIdByRoleId(List<Integer> ids) {
+        return permissionMapper.getPermissionIdByRoleId(ids);
+    }
+
 }

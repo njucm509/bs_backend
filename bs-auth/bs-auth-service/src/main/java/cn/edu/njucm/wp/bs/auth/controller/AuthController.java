@@ -109,4 +109,14 @@ public class AuthController {
         }
         return ResponseEntity.ok(roleId);
     }
+
+    @GetMapping("permissionId")
+    public ResponseEntity<List<Integer>> getPermissionIdByRoleId(@RequestParam("ids") List<Integer> ids) {
+        List<Integer> list = authService.getPermissionIdByRoleId(ids);
+        if (CollectionUtils.isEmpty(list)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(list);
+    }
+
 }
