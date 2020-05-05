@@ -2,6 +2,9 @@ package cn.edu.njucm.wp.bs.auth.service;
 
 import cn.edu.njucm.wp.bs.auth.pojo.Permission;
 import cn.edu.njucm.wp.bs.auth.pojo.Role;
+import cn.edu.njucm.wp.bs.auth.vo.RoleVO;
+import cn.edu.njucm.wp.bs.common.pojo.PageParam;
+import cn.edu.njucm.wp.bs.common.pojo.PageResult;
 
 import java.util.List;
 
@@ -27,5 +30,17 @@ public interface AuthService {
     List<Permission> permissionList();
 
     List<Integer> getPermissionIdByRoleId(List<Integer> ids);
+
+    Boolean check(Permission permission);
+
+    Boolean create(Permission permission);
+
+    Boolean update(Permission permission);
+
+    PageResult<RoleVO> list(PageParam param);
+
+    Integer bindPermission(Integer roleId, List<Integer> permissionId);
+
+    Integer bindField(Integer id, List<Integer> fieldId);
 
 }

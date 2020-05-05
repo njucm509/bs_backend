@@ -20,4 +20,19 @@
             </foreach>
         </where>
     </select>
+
+    <select id="getPermissionIdsByRoleId" resultType="java.lang.Integer">
+        select permission_id from
+        <include refid="rolePermission"/>
+        where role_id = #{id}
+    </select>
+
+    <select id="check" resultType="java.lang.Integer">
+        SELECT count(id) FROM
+        <include refid="permission"/>
+        WHERE (slug = #{slug} OR name = #{name})
+        <if test="id != null">
+            and id != #{id}
+        </if>
+    </select>
 </mapper>
