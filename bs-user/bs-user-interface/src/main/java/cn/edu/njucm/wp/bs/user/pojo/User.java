@@ -19,14 +19,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Length(min = 4,max = 15,message = "用户名只能在4～15位之间")
     private String name;
 
     private String nickname;
 
     private String password;
 
-    @Pattern(regexp = "^1[35678]\\d{9}$", message = "手机号格式不正确")
     private String phone;
 
     private String email;

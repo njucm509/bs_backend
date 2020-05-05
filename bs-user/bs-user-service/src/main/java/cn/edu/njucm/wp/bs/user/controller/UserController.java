@@ -1,20 +1,30 @@
 package cn.edu.njucm.wp.bs.user.controller;
 
 import cn.edu.njucm.wp.bs.common.encrypt.MD5Util;
+import cn.edu.njucm.wp.bs.common.pojo.PageParam;
+import cn.edu.njucm.wp.bs.common.pojo.PageResult;
 import cn.edu.njucm.wp.bs.user.pojo.User;
 import cn.edu.njucm.wp.bs.user.service.UserService;
 import cn.edu.njucm.wp.bs.user.vo.RegisterForm;
 import cn.edu.njucm.wp.bs.user.vo.UserVO;
 import cn.edu.njucm.wp.bs.util.IPUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -75,7 +85,7 @@ public class UserController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<UserVO> create(@RequestBody RegisterForm userVO, HttpServletRequest request) {
+    public ResponseEntity<UserVO> create(@RequestBody UserVO userVO, HttpServletRequest request) {
         log.info("register: {}", userVO);
         if (userService.getByName(userVO.getName()) != null) {
             return ResponseEntity.ok(null);
@@ -89,7 +99,7 @@ public class UserController {
         boolean flag = userService.create(user) == 1;
         if (flag) {
             User cur = userService.getByName(userVO.getName());
-            Boolean f = userService.bindRole(cur.getId(), Arrays.asList(userVO.getRoleId()));
+            Boolean f = userService.bindRole(cur.getId(), userVO.getRoleId());
             List<Integer> roleId = userService.getRoleIdByUserId(cur.getId());
             BeanUtils.copyProperties(cur, res);
             res.setRoleId(roleId);
@@ -119,5 +129,59 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("page")
+    public ResponseEntity<PageResult<UserVO>> getUserByPage(PageParam param) {
+        PageResult<UserVO> result = userService.getUserByPageAndSort(param);
+        if (result == null | result.getItems().size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("flag/check")
+    public ResponseEntity<Boolean> checkUserFlag(@RequestBody User user) {
+        log.info("flag check user: {}", user);
+        return ResponseEntity.ok(userService.checkFlag(user));
+    }
+
+    @GetMapping("mb/down")
+    public ResponseEntity<byte[]> down() {
+        log.info("down user.csv");
+        String colNames = "姓名,手机号,邮箱";
+        String data = "张三,13012343456,tmp@tmp.com";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "user.csv");
+        ResponseEntity<byte[]> res = null;
+        try {
+            File tempFile = File.createTempFile("user", "csv");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+            log.info("col : {}", colNames);
+            bw.write(colNames);
+            bw.newLine();
+            log.info("data : {}", data);
+            bw.write(data);
+            bw.flush();
+            bw.close();
+            res = new ResponseEntity<>(FileUtils.readFileToByteArray(tempFile), headers, HttpStatus.CREATED);
+            boolean b = tempFile.delete();
+            log.info("temp file delete {} ...", b);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    @RequestMapping("/user/multi")
+    public ResponseEntity<Void> multi(MultipartFile file) {
+        log.info("user: {}", file.getOriginalFilename());
+        try {
+            userService.multi(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
