@@ -31,6 +31,7 @@ public class FileController {
     @RequestMapping("/file")
     public HashMap<String, String> handleFileUpload(MultipartFile file) {
         log.info("{} enter...", file.getOriginalFilename());
+
         HashMap<String, String> res = null;
         try {
             res = fileService.handleFileUpload(file);
