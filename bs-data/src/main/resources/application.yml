@@ -23,3 +23,19 @@ eureka:
 mybatis:
   mapper-locations: cn/edu/njucm/wp/bs/data/mapper/*.xml
   type-aliases-package: cn.edu.njucm.wp.bs.data.pojo
+hadoop:
+  home: /usr/local/Cellar/hadoop/3.2.1
+  user: weilin
+  hdfs:
+    uri: localhost:8020
+    userFilePath: /input
+logging:
+  level:
+    cn:
+      edu:
+        njucm:
+          wp:
+            bs:
+              data:
+                mapper:
+                  debug
