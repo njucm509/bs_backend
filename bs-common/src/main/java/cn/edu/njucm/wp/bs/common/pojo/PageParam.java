@@ -1,10 +1,13 @@
 package cn.edu.njucm.wp.bs.common.pojo;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageParam {
     private Integer page = 1; // 当前页
     private Integer rows = 5; // 每页大小
