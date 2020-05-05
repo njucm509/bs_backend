@@ -3,6 +3,7 @@ package cn.edu.njucm.wp.bs.encrypt.HE;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HEUtil {
     private HE he = new HE();
@@ -23,11 +24,22 @@ public class HEUtil {
     public String encrypt(String plaintext) {
         initMap(plaintext);
         ArrayList<BigInteger> groups = groupByPlaintext(plaintext);
+        System.out.println(groups.size() );
         StringBuilder sb = new StringBuilder();
         for (BigInteger group : groups) {
             sb.append(fixBin(new BigInteger(he.encrypt(group).toString(), 10).toString(2)));
         }
         return sb.toString();
+    }
+
+    public List<String> encrypt2Group(String plaintext) {
+        initMap(plaintext);
+        ArrayList<BigInteger> groups = groupByPlaintext(plaintext);
+        List<String> list = new ArrayList<>();
+        for (BigInteger group : groups) {
+            list.add(fixBin(new BigInteger(he.encrypt(group).toString(), 10).toString(2)));
+        }
+        return list;
     }
 
     private void initMap(String plaintext) {
@@ -209,7 +221,7 @@ public class HEUtil {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String plaintext_100 = "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试";
+        String plaintext_100 = "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试1232";
         String plaintext_1000 = "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
                 "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
                 "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
@@ -309,14 +321,14 @@ public class HEUtil {
                 "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
                 "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
                 "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
-                "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试";
+                "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试12321232";
 
 
         HEUtil heUtil = new HEUtil();
 
-        heUtil.setGroupLength(16);
+        heUtil.setGroupLength(8);
         long start = System.currentTimeMillis();
-        String _1_100_enc = heUtil.encrypt(plaintext_4000);
+        String _1_100_enc = heUtil.encrypt(plaintext_100);
         long end = System.currentTimeMillis();
         System.out.println("enc : " + (end - start) + "ms");
 

@@ -28,7 +28,7 @@ public class HE {
         p = new BigInteger(bitLength, certainty, new Random());
         q = new BigInteger(bitLength, certainty, new Random());
         n = p.multiply(q);
-        r1 = new BigInteger("2");
+        r1 = new BigInteger(String.valueOf(new Random().nextInt(10) + 1));
 
     }
 
@@ -54,6 +54,10 @@ public class HE {
 
     public BigInteger getN() {
         return n;
+    }
+
+    public void setR1(BigInteger r1) {
+        this.r1 = r1;
     }
 
     public static void main(String[] args) {
