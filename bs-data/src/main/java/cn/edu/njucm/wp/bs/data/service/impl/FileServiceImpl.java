@@ -106,4 +106,37 @@ public class FileServiceImpl implements FileService {
     public File getFileByUserId(Long id) {
         return fileMapper.getFileByUserId(id);
     }
+
+    @Override
+    public HashMap<String, String> handleFileUpload(MultipartFile file, Long id) throws IOException {
+        String userFilePath = HDFSConfig.userFilePath;
+        if (userFilePath == null) {
+            userFilePath = "/input/_" + id;
+        }
+        HashMap<String, String> res = new HashMap<>();
+        Path path = new Path(userFilePath);
+        if (!fileSystem.exists(path)) {
+            fileSystem.mkdirs(path);
+        }
+        Path filePath = new Path(userFilePath + SEPARATOR + file.getOriginalFilename());
+        if (fileSystem.exists(filePath)) {
+            res.put("msg", "文件已存在!");
+            return res;
+        }
+        FSDataOutputStream fos = fileSystem.create(filePath, true);
+        IOUtils.copyBytes(file.getInputStream(), fos, 4096, true);
+
+        res.put("msg", file.getOriginalFilename() + " 文件上传成功!");
+
+        return res;    }
+
+    @Override
+    public Boolean create(File file) {
+        return fileMapper.insertSelective(file) == 1;
+    }
+
+    @Override
+    public byte[] downFileFromHDFS(File file) {
+        return new byte[0];
+    }
 }

@@ -17,4 +17,10 @@ public interface FileService {
     List<HashMap<String, Object>> listFile() throws IOException;
 
     File getFileByUserId(Long id);
+
+    HashMap<String, String> handleFileUpload(MultipartFile file, Long id) throws IOException;
+
+    Boolean create(File file);
+
+    byte[] downFileFromHDFS(File file);
 }

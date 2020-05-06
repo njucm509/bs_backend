@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,8 +34,7 @@ public class FileController {
 
     @RequestMapping("create")
     public ResponseEntity<Boolean> create(File file) {
-
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(fileService.create(file));
     }
 
     @RequestMapping("delete")
@@ -52,13 +53,26 @@ public class FileController {
     }
 
     @RequestMapping("hdfs/upload")
-    public ResponseEntity<HashMap<String, String>> handleFileUpload(MultipartFile file) {
+    public ResponseEntity<HashMap<String, String>> handleFileUpload(MultipartFile file, @RequestParam("id") Long id) {
         HashMap<String, String> res = null;
         try {
-            res = fileService.handleFileUpload(file);
+            res = fileService.handleFileUpload(file, id);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        File f = new File();
+
+        f.setName(file.getOriginalFilename());
+        f.setUserId(id);
+        f.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        f.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        fileService.create(f);
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("hdfs/down")
+    public ResponseEntity<byte[]> downFileFromHDFS(File file) {
+        byte[] res = fileService.downFileFromHDFS(file);
         return ResponseEntity.ok(res);
     }
 
