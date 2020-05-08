@@ -142,7 +142,12 @@ public class FileServiceImpl implements FileService {
         if (file.getUpdatedAt() == null) {
             file.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
         }
+        moveFile2UserPath(file.getName(), file.getUserId());
         return fileMapper.insertSelective(file) == 1;
+    }
+
+    private void moveFile2UserPath(String name, Long userId) {
+
     }
 
     @Override
