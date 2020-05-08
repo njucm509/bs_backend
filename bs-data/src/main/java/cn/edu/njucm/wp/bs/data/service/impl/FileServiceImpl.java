@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,7 @@ public class FileServiceImpl implements FileService {
     public PageResult<File> getFileByPage(PageParam param) {
         PageHelper.startPage(param.getPage(), param.getRows());
         Example example = new Example(File.class);
+        example.createCriteria().andEqualTo("userId", param.getUserId());
         if (StringUtils.isNotBlank(param.getKey())) {
             example.createCriteria().andLike("name", "%" + param.getKey() + "%");
         }
@@ -128,10 +131,17 @@ public class FileServiceImpl implements FileService {
 
         res.put("msg", file.getOriginalFilename() + " 文件上传成功!");
 
-        return res;    }
+        return res;
+    }
 
     @Override
     public Boolean create(File file) {
+        if (file.getCreatedAt() == null) {
+            file.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        }
+        if (file.getUpdatedAt() == null) {
+            file.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
+        }
         return fileMapper.insertSelective(file) == 1;
     }
 
@@ -139,4 +149,10 @@ public class FileServiceImpl implements FileService {
     public byte[] downFileFromHDFS(File file) {
         return new byte[0];
     }
+
+    @Override
+    public Boolean delete(File file) {
+        return fileMapper.deleteByPrimaryKey(file) == 1;
+    }
+
 }
