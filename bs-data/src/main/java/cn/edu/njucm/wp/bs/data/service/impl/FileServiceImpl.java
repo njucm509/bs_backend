@@ -132,7 +132,12 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Boolean create(File file) {
+        moveFile2UserPath(file.getName(), file.getUserId());
         return fileMapper.insertSelective(file) == 1;
+    }
+
+    private void moveFile2UserPath(String name, Long userId) {
+
     }
 
     @Override
