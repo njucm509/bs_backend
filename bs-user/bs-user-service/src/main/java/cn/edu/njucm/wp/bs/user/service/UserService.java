@@ -27,4 +27,10 @@ public interface UserService {
     Boolean checkFlag(User user);
 
     void multi(MultipartFile file) throws IOException;
+
+    UserVO getUserById(Long id);
+
+    List<UserVO> getAll();
+
+    Integer deleteUserRole(Long id);
 }

@@ -9,8 +9,13 @@
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
     </resultMap>
-    <select id="check" resultType="java.lang.Integer">
-        SELECT count(id) FROM
+
+    <resultMap id="count" type="java.util.Map">
+        <result column="count" property="count" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="check" resultMap="count">
+        SELECT count(id) as count FROM
         <include refid="role"/>
         WHERE (slug = #{slug} OR name = #{name})
         <if test="id != null">

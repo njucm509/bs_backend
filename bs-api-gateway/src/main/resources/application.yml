@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: bs-api-gateway
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 eureka:
   client:
     service-url:
@@ -19,6 +23,8 @@ zuul:
     user-service: /user/**
     auth-service: /auth/**
     data-service: /data/**
+    release-service: /release/**
+    encrypt-service: /encrypt/**
 #ribbon:
 #  ConnectTimeout: 250 # 连接超时时间(ms)
 #    ReadTimeout: 2000 # 通信超时时间(ms)

@@ -1,5 +1,7 @@
 package cn.edu.njucm.wp.bs.encrypt.HE;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class HEUtil {
     public String encrypt(String plaintext) {
         initMap(plaintext);
         ArrayList<BigInteger> groups = groupByPlaintext(plaintext);
-        System.out.println(groups.size() );
+        System.out.println("enc big integer group: " + groups);
         StringBuilder sb = new StringBuilder();
         for (BigInteger group : groups) {
             sb.append(fixBin(new BigInteger(he.encrypt(group).toString(), 10).toString(2)));
@@ -68,6 +70,7 @@ public class HEUtil {
 
     public String decrypt(String ciphertext) {
         ArrayList<BigInteger> groups = groupByCiphertext(ciphertext);
+        System.out.println("dec big integer group: " + groups);
         StringBuilder sb = new StringBuilder();
         for (BigInteger group : groups) {
             sb.append(fixBin(new BigInteger(he.decrypt(group).toString(), 10).toString(2), groupLength));
@@ -148,6 +151,7 @@ public class HEUtil {
                 item = sb.substring(0, groupLength);
                 sb.delete(0, groupLength);
             }
+            System.out.println("dec bin: " + item);
             list.add(new BigInteger(toDecimal(item)));
         }
         return list;
@@ -180,6 +184,7 @@ public class HEUtil {
                 item = sb.substring(0, groupLength);
                 sb.delete(0, groupLength);
             }
+            System.out.println("enc bin: " + item);
             list.add(toBigInteger(item));
         }
         return list;
@@ -220,7 +225,11 @@ public class HEUtil {
         return he;
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public void setHe(HE he) {
+        this.he = he;
+    }
+
+    public static void main(String[] args) throws IOException {
         String plaintext_100 = "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试1232";
         String plaintext_1000 = "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
                 "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
@@ -323,13 +332,26 @@ public class HEUtil {
                 "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试" +
                 "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试12321232";
 
+        String text = "制南星12,北沙参12,半枝莲20,南沙参12,地骨皮12,大麦冬10,太子参15,山慈菇12,旋覆花(>包煎)5,桃仁10,法半夏10,泽漆15," +
+                "炒白芥子10,炒苏子10,炙僵蚕10,炙桑白/r/n皮25,炙鳖甲15,>猫爪草20,生黄芪25,白花蛇舌草20,知母10,红豆杉10,肿节风20,茜草根10,葶苈子25,陈皮6,鱼腥草20";
 
+        text = "制南星12,北沙参12,半枝莲20,南沙参12,地骨皮12,大麦冬10,太子参15,山慈菇12,旋覆花(包煎)5,桃仁10,法半夏10,泽漆15,炒白芥子10,炒苏子10,炙僵蚕10,炙桑白皮25,炙鳖甲15,猫爪草20,生黄芪25,白花蛇舌草20,知母10,红豆杉10,肿节风20,茜草根10,葶苈子25,陈皮6,鱼腥草20\n" +
+                "仙鹤草15,冬凌草15,制南星12,制黄精10,功劳叶10,北沙参12,半枝莲20,南沙参12,土鳖虫6,地骨皮10,天冬10,天葵子12,太子参15,山慈菇15,桃仁10,法半夏10,泽漆15,炙僵蚕10,炙蜈蚣3,炙鳖甲(先煎)15,炙黄芪20,猫爪草20,白花蛇舌草20,羊乳15,肿节风20,露蜂房10,鬼馒头20,鸡血藤15,麦冬10,黑料豆10\n" +
+                "丹参12,仙鹤草15,僵蚕10,党参12,八月札12,冬凌草15,制南星10,北沙参12,半枝莲20,南沙参12,合欢皮15,大麦冬10,太子参15,山慈菇12,泽漆15,炙甘草3,炙黄芪20,焦白术10,猫爪草20,白毛夏枯草15,白花蛇舌草20,羊乳15,肿节风20,茯苓10,鳖甲(先煎)15,鸡血藤15\n" +
+                "北沙参12,南沙参12,地骨皮10,天冬10,天花粉10,太子参15,泽漆15,炒神曲10,炙桑白皮10,炙甘草3,炙鳖甲(先煎)15,焦白术10,猫爪草20,白毛夏枯草15,白花蛇舌草20,知母9,羊乳15,肿节风15,茯苓10,陈皮,麦冬10\n" +
+                "五味子5,制黄精10,大麦冬10,天冬10,天花粉10,太子参15,山慈菇12,山萸肉10,法半夏10,泽漆15,潞党参10,灵芝6,炒玉竹10,猫爪草20,生黄芪30,知母10,羊乳15,肿节风20,胡桃肉10,藤梨根20,陈皮6";
+
+        text = "五味子";
         HEUtil heUtil = new HEUtil();
 
+        System.out.println(text);
         heUtil.setGroupLength(8);
         long start = System.currentTimeMillis();
-        String _1_100_enc = heUtil.encrypt(plaintext_100);
+        String _1_100_enc = heUtil.encrypt(text);
         long end = System.currentTimeMillis();
+        System.out.println(_1_100_enc);
+//        FileWriter writer = new FileWriter("./output.txt");
+//        writer.write(_1_100_enc);
         System.out.println("enc : " + (end - start) + "ms");
 
 //        System.out.println("len: " + _1_100_enc.length() + " 密文: " + _1_100_enc);

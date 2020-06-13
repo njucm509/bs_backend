@@ -17,6 +17,9 @@ public class Role {
 
     private String name;
 
+    @Column(name = "parent_id")
+    private Integer parentId;
+
     private String descriptions;
 
     @Column(name = "created_at")

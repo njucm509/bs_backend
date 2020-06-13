@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.njucm.wp.bs.data.mapper.FileMapper">
+
+    <insert id="insert2init">
+        insert into init_data_all_field (${cols}) values
+        <foreach collection="items" item="i" separator=",">
+            ${i}
+        </foreach>
+    </insert>
+
+    <insert id="insert2db">
+        insert into init_data_all_field_k (${cols}) values
+        <foreach collection="items" item="i" separator=",">
+            ${i}
+        </foreach>
+    </insert>
+
+    <select id="getDataByUserId" resultType="java.util.Map">
+        select <foreach collection="cols" item="col" separator=",">${col}</foreach> from init_data_all_field where
+        user_id = #{id}
+    </select>
+
+    <select id="getDataByUserIdAndDate" resultType="java.util.Map">
+        select <foreach collection="cols" item="col" separator=",">${col}</foreach> from init_data_all_field where
+        user_id = #{id} and date in
+        <foreach collection="date" item="d" index="index" open="(" close=")" separator=",">
+            #{d}
+        </foreach>
+    </select>
+
+    <select id="getAnonymousDataByUserId" resultType="java.util.Map">
+        select <foreach collection="cols" item="col" separator=",">${col}</foreach> from init_data_all_field_k where
+        user_id = #{id}
+    </select>
+
+    <select id="getAnonymousDataByUserIdAndDate" resultType="java.util.Map">
+        select <foreach collection="cols" item="col" separator=",">${col}</foreach> from init_data_all_field_k where
+        user_id = #{id} and date in
+        <foreach collection="date" item="d" index="index" open="(" close=")" separator=",">
+            #{d}
+        </foreach>
+    </select>
+
+    <select id="getDataByIdAndDate" resultType="java.util.Map">
+
+    </select>
+</mapper>

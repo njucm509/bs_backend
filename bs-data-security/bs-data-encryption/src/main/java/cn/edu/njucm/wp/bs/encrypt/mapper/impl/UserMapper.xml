@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dc.backend.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="User">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="account" property="account"/>
+        <result column="password" property="pwd"/>
+        <result column="create_time" property="createAt"/>
+        <result column="update_time" property="updateAt"/>
+    </resultMap>
+    <select id="login" resultType="User" resultMap="BaseResultMap">
+        select * from wp_user where account=#{account}
+    </select>
+    <!--    <insert id="create">-->
+    <!--        insert into wp_user (id,name,account,password,create_time,update_time) values (null,#{name},#{account},#{password},now(),now())-->
+    <!--    </insert>-->
+    <!--    <delete id="delete">-->
+    <!--        delete from wp_user where id=#{id}-->
+    <!--    </delete>-->
+    <!--    <select id="queryAll" resultType="UserPojo" resultMap="BaseResultMap">-->
+    <!--        select * from wp_user-->
+    <!--    </select>-->
+    <!--    <select id="queryById" resultType="UserPojo" resultMap="BaseResultMap">-->
+    <!--        select * from wp_user where id=#{id}-->
+    <!--    </select>-->
+    <update id="update">
+        update wp_user set name=#{name},password=#{pwd},update_time=now() where id = #{id}
+    </update>
+
+</mapper>

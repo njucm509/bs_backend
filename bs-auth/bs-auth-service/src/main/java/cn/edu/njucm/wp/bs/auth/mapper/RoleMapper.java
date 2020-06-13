@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface RoleMapper extends Mapper<Role> {
-    Integer check(Role role);
+    Map<String, Object> check(Role role);
 
     Role getRoleByUserId(Long id);
 
@@ -34,4 +35,6 @@ public interface RoleMapper extends Mapper<Role> {
     @Insert("insert into role_field values (#{roleId},#{fieldId},now(),now())")
     Integer bindField(@Param("roleId") Integer roleId, @Param("fieldId") Integer fieldId);
 
+    @Select("select * from roles where parent_id = 0")
+    List<Role> getRootRole();
 }

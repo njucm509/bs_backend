@@ -37,11 +37,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
-    }
-
     @PostMapping("login")
     public ResponseEntity<HashMap<String, Object>> login(@RequestBody User user) {
         log.info("user: {}", user);
@@ -114,6 +109,8 @@ public class UserController {
         User user = new User();
         BeanUtils.copyProperties(userVO, user);
         Integer res = userService.update(user);
+        Integer i = userService.deleteUserRole(user.getId());
+        Boolean flag = userService.bindRole(user.getId(), userVO.getRoleId());
         if (res == 1) {
             return ResponseEntity.ok(true);
         } else {
@@ -174,7 +171,7 @@ public class UserController {
         return res;
     }
 
-    @RequestMapping("/user/multi")
+    @RequestMapping("/multi")
     public ResponseEntity<Void> multi(MultipartFile file) {
         log.info("user: {}", file.getOriginalFilename());
         try {
@@ -183,5 +180,25 @@ public class UserController {
             e.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("detail/{id}")
+    public ResponseEntity<UserVO> getUserById(@PathVariable("id") Long id) {
+        UserVO userVO = userService.getUserById(id);
+        if (userVO == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(userVO);
+    }
+
+    @GetMapping("list")
+    public ResponseEntity<List<UserVO>> getUserList() {
+        List<UserVO> list = userService.getAll();
+
+        if (CollectionUtils.isEmpty(list)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(list);
     }
 }

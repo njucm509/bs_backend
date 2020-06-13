@@ -18,9 +18,23 @@ public class HE {
         KeyGeneration(512, 64);
     }
 
+    public HE(BigInteger p, BigInteger q, BigInteger r1, BigInteger n) {
+        this.p = p;
+        this.q = q;
+        this.r1 = r1;
+        this.n = n;
+    }
+
     // bitLength 随机素数长度
     public HE(int bitLength, int certainty) {
         KeyGeneration(bitLength, certainty);
+    }
+
+    public HE(BigInteger p, BigInteger q, BigInteger r1) {
+        this.p = p;
+        this.q = q;
+        this.r1 = r1;
+        this.n = p.multiply(q);
     }
 
     private void KeyGeneration(int bitLength, int certainty) {

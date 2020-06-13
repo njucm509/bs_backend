@@ -76,6 +76,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer update(User user) {
+        if (user.getPassword() != null) {
+            user.setPassword(MD5Util.encrypt(user.getPassword()));
+        }
+
         return userMapper.updateByPrimaryKeySelective(user);
     }
 
@@ -133,12 +137,42 @@ public class UserServiceImpl implements UserService {
                 user.setEmail(split[2]);
             }
             user.setFlag(0);
-            user.setPassword("12345678");
+            user.setPassword(MD5Util.encrypt("12345678"));
             user.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
             user.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Shanghai")));
             list.add(user);
         }
         userMapper.insertList(list);
+    }
+
+    @Override
+    public UserVO getUserById(Long id) {
+        User user = userMapper.selectByPrimaryKey(id);
+        List<Integer> roleId = authClient.getRoleByUserId(id);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        userVO.setRoleId(roleId);
+        return userVO;
+    }
+
+    @Override
+    public List<UserVO> getAll() {
+        List<User> users = userMapper.selectAll();
+        List<UserVO> page = new ArrayList<>();
+        for (User user : users) {
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            List<Integer> roleId = getRoleIdByUserId(user.getId());
+            userVO.setRoleId(roleId);
+            page.add(userVO);
+        }
+
+        return page;
+    }
+
+    @Override
+    public Integer deleteUserRole(Long id) {
+        return userMapper.deleteUserRole(id);
     }
 
     private String genereteAccount(int len) {

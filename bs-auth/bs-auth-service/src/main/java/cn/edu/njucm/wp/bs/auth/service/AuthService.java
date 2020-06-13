@@ -43,4 +43,6 @@ public interface AuthService {
 
     Integer bindField(Integer id, List<Integer> fieldId);
 
+    List<Role> getRootRole();
+
 }

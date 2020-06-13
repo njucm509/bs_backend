@@ -26,8 +26,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -95,12 +94,35 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Boolean check(Role role) {
-        return roleMapper.check(role) == 1 ? true : false;
+        Map<String, Object> check = roleMapper.check(role);
+        int count = 0;
+        if (check.containsKey("count")) {
+            count = Integer.parseInt(String.valueOf(check.get("count")));
+        }
+        return count == 1;
     }
 
     @Override
     public List<Integer> getRoleIdByUserId(Long id) {
-        return roleMapper.getRoleIdByUserId(id);
+        List<Integer> roleIds = roleMapper.getRoleIdByUserId(id);
+        System.out.println(id);
+        Queue<Integer> roles = new LinkedList<>();
+        List<Integer> res = new ArrayList<>(roleIds);
+        System.out.println(roleIds);
+        for (Integer roleId : roleIds) {
+            Role role = roleMapper.selectByPrimaryKey(roleId);
+            roles.add(role.getParentId());
+            while (!roles.isEmpty()) {
+                Integer parentId = roles.poll();
+                if (!parentId.equals(0)) {
+                    Role parentRole = roleMapper.selectByPrimaryKey(parentId);
+                    res.add(parentId);
+                    roles.add(parentRole.getParentId());
+                }
+            }
+        }
+        System.out.println(res);
+        return res;
     }
 
     @Override
@@ -127,6 +149,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Integer bindRole(Long userId, List<Integer> roleId) {
+
         Integer res = 0;
         for (Integer id : roleId) {
             res += roleMapper.bindRole(userId, id);
@@ -219,6 +242,11 @@ public class AuthServiceImpl implements AuthService {
             res += roleMapper.bindField(roleId, id);
         }
         return res;
+    }
+
+    @Override
+    public List<Role> getRootRole() {
+        return roleMapper.getRootRole();
     }
 
 }

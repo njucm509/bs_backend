@@ -156,7 +156,17 @@ public class AuthController {
         if (CollectionUtils.isEmpty(list)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("role/root/list")
+    public ResponseEntity<List<Role>> getRootRole(){
+        List<Role> list = authService.getRootRole();
+        if (CollectionUtils.isEmpty(list)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(list);
+    }
 }

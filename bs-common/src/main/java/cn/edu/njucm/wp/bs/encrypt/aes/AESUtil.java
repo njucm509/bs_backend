@@ -97,20 +97,20 @@ public class AESUtil {
         }
     }
 
-    public static String generateKey(Integer userId) {
+    public static String generateKey(Integer fileId) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String user = String.valueOf(userId);
+        StringBuilder user = new StringBuilder(String.valueOf(fileId));
         int len = user.length();
         if (len > 16) {
-            user = user.substring(0, 16);
+            user = new StringBuilder(user.substring(0, 16));
         } else {
             Random random = new Random();
             for (int i = 0; i < 16 - len; i++) {
                 int number = random.nextInt(52);
-                user += str.charAt(number);
+                user.append(str.charAt(number));
             }
         }
-        return user;
+        return user.toString();
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
